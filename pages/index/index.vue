@@ -5,7 +5,7 @@
 			<u-navbar class="navbar" v-if="isNavbarShow" :is-back="isNavbarBack" :title="title" :background="background" title-color="white" title-size="35" back-icon-color="#fff" >
 			
 			</u-navbar>
-			<view class="content" :style="contentMoveStyle" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
+			<view :class="{'content': true, 'animation': isAnimation}" :style="contentMoveStyle" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
 				<!-- <home v-if="current == 0"></home>
 				<unlock v-if="current == 1"></unlock>
 				<ranking v-if="current == 2"></ranking>
@@ -30,7 +30,7 @@
 	import Chat from "../chat/chat.vue"
 	import Profile from "../profile/profile.vue"
 	
-	import { allBar } from "@/common/mixins.js"
+	import { allBar, eventSEO, windowWidth } from "@/common/mixins.js"
 	import { mapState } from "vuex"
 	
 	let _this;
@@ -50,13 +50,17 @@
 				isNavbarShow: true,
 				isTabbarShow: true,
 				isMaskShow: false,
-				x: -1,
-				diffX: 0
+				isAnimation: false,
+				tabbarWidth: -windowWidth * 4,
+				startX: -1,
+				diffX: 0,
+				flag: true
 			}
 		},
-		mixins: [allBar],
+		mixins: [allBar, eventSEO],
 		onLoad() {
 			_this = this;
+			console.log(windowWidth)
 		},
 		computed: {
 			...mapState(['list']),
@@ -67,28 +71,64 @@
 				return {
 					transform: `translateX(${_this.diffX}px)`
 				}
+			},
+			currentX(){
+				return -(this.current * windowWidth);
 			}
 		},
 		methods: {
 			tabbarChange(index){
 				this.current = index;
+				this.diffX = index * -windowWidth;
 			},
-			touchstart({ touches }){
-				this.x = touches[0].pageX;
-				// console.log(touches);
+			touchStart({ touches }){
+				if(this.flag) {
+					this.startX = touches[0].pageX;
+				}
 			},
-			touchmove({ touches }) {
-				this.diffX = touches[0].pageX - this.x;
-				console.log(this.diffX)
+			touchMove({ touches }) {
+				let diffX = this.currentX + (touches[0].pageX - this.startX);
+				// if(this.flag && x <= 0 || x >= this.tabbarWidth) {
+				// 	this.diffX = -(this.current * windowWidth) + (touches[0].pageX - this.startX);
+				// };
+				if(this.flag && diffX <= 0 && diffX >= this.tabbarWidth) {
+					this.diffX = diffX;
+				}
 			},
-			touchend({ changedTouches }) {
-				this.x = changedTouches[0].pageX;
+			touchEnd({ changedTouches }) {
+				this.flag = false;
+				let diffX = this.startX - changedTouches[0].pageX;
+				if(Math.abs(diffX) < 70) return this.animation();
+				if(diffX > 0 && this.current < 4) this.current++
+				else if(diffX < 0 && this.current > 0) this.current--;
+				this.animation();
+			},
+			animation(){
+				this.antiShake(release => {
+					let offsetX = this.currentX;
+					_this.isAnimation = true;
+					_this.diffX = offsetX;
+					setTimeout(() => {
+						_this.isAnimation = false;
+						_this.flag = true;
+						release();
+					}, 300);
+				});
 			}
 		}
+		// watch: {
+		// 	diffX(newVal, oldVal){
+		// 		// if(newVal > 0) this.diffX = 0
+		// 		// else if(newVal < this.tabbarWidth) this.diffX = this.tabbarWidth;
+		// 	}
+		// }
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+	.animation {
+		transition: all .3s;
+	}
 	.index {
 		height: 100vh;
 		background-color: #fcfcfc;
@@ -96,6 +136,7 @@
 			display: flex;
 			flex-direction: column;
 			height: 100%;
+			overflow: hidden;
 			.content {
 				flex: 1;
 				display: flex;

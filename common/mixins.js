@@ -1,5 +1,22 @@
 import { mapState } from "vuex"
 import { antiShake, throttle } from "./util.js"
+
+let windowWidth;
+let windowHeight;
+uni.getSystemInfo({
+    success: function (res) {
+		windowWidth = res.windowWidth + 1;
+		windowHeight = res.windowHeight + 1;
+        // console.log(res.model);
+        // console.log(res.pixelRatio);
+        // console.log(res.windowWidth);
+        // console.log(res.windowHeight);
+        // console.log(res.language);
+        // console.log(res.version);
+        // console.log(res.platform);
+    }
+});
+
 const navBar = {
 	data(){
 		return {
@@ -28,9 +45,13 @@ const allBar = {
 	...navBar,
 	...tabBar
 }
+
+
 export {
 	allBar,
 	navBar,
 	tabBar,
-	eventSEO
+	eventSEO,
+	windowWidth,
+	windowHeight
 }

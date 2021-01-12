@@ -22,6 +22,8 @@
 	}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+	.profile {
+		background-color: green;
+	}
 </style>

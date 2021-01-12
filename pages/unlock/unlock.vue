@@ -22,6 +22,8 @@
 	}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+	.unlock {
+		background-color: purple;
+	}
 </style>

@@ -22,6 +22,8 @@
 	}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+	.chat {
+		background-color: yellow;
+	}
 </style>

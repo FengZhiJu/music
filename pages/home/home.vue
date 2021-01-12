@@ -1,13 +1,14 @@
 <template>
 	<view class="home">
-		home
+		<music-list></music-list>
 	</view>
 </template>
 
 <script>
+	import MusicList from "@/components/musicList.vue"
 	export default {
 		components: {
-
+			MusicList
 		},
 		data() {
 			return {
@@ -22,6 +23,8 @@
 	}
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+	.home {
+		// background-color: skyblue;
+	}
 </style>
