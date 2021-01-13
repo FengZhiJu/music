@@ -3,7 +3,12 @@
 		<!-- <u-mask :show="isMaskShow" :z-index="10000" @tap="$refs.addPlanButton.addButtonToggle()"></u-mask> -->
 		<view class="main">
 			<u-navbar class="navbar" v-if="isNavbarShow" :is-back="isNavbarBack" :title="title" :background="background" title-color="white" title-size="35" back-icon-color="#fff" >
-			
+				<!-- <u-dropdown>
+					<u-dropdown-item v-model="value1" title="首页" :options="tabbarOption"></u-dropdown-item>
+				</u-dropdown> -->
+				<template #right>
+					
+				</template>
 			</u-navbar>
 			<view :class="{'content': true, 'animation': isAnimation}" :style="contentMoveStyle" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
 				<!-- <home v-if="current == 0"></home>
@@ -30,7 +35,7 @@
 	import Chat from "../chat/chat.vue"
 	import Profile from "../profile/profile.vue"
 	
-	import { allBar, eventSEO, windowWidth } from "@/common/mixins.js"
+	import { allBar, eventSEO, windowWidth, statusBarHeight } from "@/common/mixins.js"
 	import { mapState } from "vuex"
 	
 	let _this;
@@ -60,7 +65,6 @@
 		mixins: [allBar, eventSEO],
 		onLoad() {
 			_this = this;
-			console.log(windowWidth)
 		},
 		computed: {
 			...mapState(['list']),
@@ -87,18 +91,16 @@
 				}
 			},
 			touchMove({ touches }) {
+				if(!this.flag || this.startX == -1) return 0;
 				let diffX = this.currentX + (touches[0].pageX - this.startX);
-				// if(this.flag && x <= 0 || x >= this.tabbarWidth) {
-				// 	this.diffX = -(this.current * windowWidth) + (touches[0].pageX - this.startX);
-				// };
-				if(this.flag && diffX <= 0 && diffX >= this.tabbarWidth) {
+				if(diffX <= 0 && diffX >= this.tabbarWidth) {
 					this.diffX = diffX;
 				}
 			},
 			touchEnd({ changedTouches }) {
 				this.flag = false;
 				let diffX = this.startX - changedTouches[0].pageX;
-				if(Math.abs(diffX) < 70) return this.animation();
+				if(Math.abs(diffX) < 70 || this.startX == -1) return this.animation();
 				if(diffX > 0 && this.current < 4) this.current++
 				else if(diffX < 0 && this.current > 0) this.current--;
 				this.animation();
@@ -110,6 +112,7 @@
 					_this.diffX = offsetX;
 					setTimeout(() => {
 						_this.isAnimation = false;
+						this.startX = -1;
 						_this.flag = true;
 						release();
 					}, 300);
