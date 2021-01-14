@@ -3,11 +3,11 @@
 		<view class="content">
 			<view class="item" v-for="(item, index) in list" :key="index">
 				<view class="serial">{{index + 1}}</view>
-				<view class="title">
+				<view class="title" @tap="clickMusic(item)">
 					<view class="music">{{item.name}}</view>
 					<view class="singer">{{item.singer}}</view>
 				</view>
-				<view class="operate">
+				<view class="operate" @click="clickMore(item)">
 					<u-icon name="more-dot-fill" size="35"></u-icon>
 				</view>
 			</view>
@@ -99,7 +99,14 @@
 			}
 		},
 		computed: {},
-		methods: {}
+		methods: {
+			clickMusic(music) {
+				this.$emit('clickMusic', music)
+			},
+			clickMore(music){
+				this.$emit('clickMore', music)
+			}
+		}
 	}
 </script>
 
@@ -125,6 +132,9 @@
 						color: #aaa;
 					}
 				}
+			}
+			.item:last-child {
+				border-bottom: 0;
 			}
 		}
 	}

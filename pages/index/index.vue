@@ -16,7 +16,7 @@
 				<ranking v-if="current == 2"></ranking>
 				<chat v-if="current == 3"></chat>
 				<profile v-if="current == 4"></profile> -->
-				<home class="content-item"></home>
+				<home class="content-item" :style="tabbarHeightStyle"></home>
 				<unlock class="content-item"></unlock>
 				<ranking class="content-item"></ranking>
 				<chat class="content-item"></chat>
@@ -35,7 +35,7 @@
 	import Chat from "../chat/chat.vue"
 	import Profile from "../profile/profile.vue"
 	
-	import { allBar, eventSEO, windowWidth, statusBarHeight } from "@/common/mixins.js"
+	import { allBar, eventSEO, windowWidth, statusBarHeight, tabbarHeight } from "@/common/mixins.js"
 	import { mapState } from "vuex"
 	
 	let _this;
@@ -78,6 +78,11 @@
 			},
 			currentX(){
 				return -(this.current * windowWidth);
+			},
+			tabbarHeightStyle(){
+				return {
+					height: tabbarHeight + 'px'
+				}
 			}
 		},
 		methods: {

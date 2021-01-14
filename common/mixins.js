@@ -4,11 +4,13 @@ import { antiShake, throttle } from "./util.js"
 let windowWidth;
 let windowHeight;
 let statusBarHeight;
+let tabbarHeight
 uni.getSystemInfo({
     success: function (res) {
 		windowWidth = res.windowWidth + 1;
 		windowHeight = res.windowHeight + 1;
 		statusBarHeight = res.statusBarHeight;
+		tabbarHeight = res.windowHeight - 94 - statusBarHeight;
         // console.log(res.model);
         // console.log(res.pixelRatio);
         // console.log(res.windowWidth);
@@ -56,5 +58,6 @@ export {
 	eventSEO,
 	windowWidth,
 	windowHeight,
-	statusBarHeight
+	statusBarHeight,
+	tabbarHeight
 }
