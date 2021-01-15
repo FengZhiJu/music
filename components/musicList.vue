@@ -18,7 +18,7 @@
 <script>
 	export default {
 		components: {
-
+			
 		},
 		data() {
 			return {
@@ -101,7 +101,7 @@
 		computed: {},
 		methods: {
 			clickMusic(music) {
-				this.$emit('clickMusic', music)
+				this.$emit('clickMusic', music);
 			},
 			clickMore(music){
 				this.$emit('clickMore', music)
@@ -119,6 +119,7 @@
 				padding: 25rpx 30rpx;
 				border-bottom: 0.2px solid $u-type-primary;
 				font-size: 30rpx;
+				// filter: blur(5px);
 				.serial {
 					width: 40rpx;
 					text-align: center;
@@ -135,6 +136,7 @@
 			}
 			.item:last-child {
 				border-bottom: 0;
+				
 			}
 		}
 	}

@@ -2,20 +2,31 @@
 	<view class="home">
 		<!-- <audio v-if="selectMusic.url" :src="selectMusic.url" :poster="false" :name="false" :author="false" :action="{method: 'pause'}" controls></audio> -->
 		<scroll-view :scroll-y="true" class="scroll-view">
-			<music-list @clickMusic="clickMusic" @clickMore='clickMore'></music-list>
+			<filters @updateType='updateType' :list="typeList"></filters>
+			<music-list @clickMusic="playMusic" @clickMore='toggleModal'></music-list>
 		</scroll-view>
-		<view style="width: 100vw;">
-			<u-modal v-model="modalShow" content="测试"></u-modal>
-		</view>
+		<u-popup v-model="showGuess" mode="center">
+			<guess-template></guess-template>
+		</u-popup>
+		
+		<!-- <u-modal v-model="modalShow" :show-cancel-button="true" title="猜歌名">
+			<view class="modal-box">
+				<u-input v-model="guessTitle" type="text" inputAlign="center" :focus="true" :clearable="false"/>
+			</view>
+		</u-modal> -->
 	</view>
 </template>
 
 <script>
 	let _this;
 	import MusicList from "@/components/musicList.vue"
+	import Filters from "./children/filters.vue"
+	import GuessTemplate from "./children/guessTemplate.vue"
 	export default {
 		components: {
-			MusicList
+			MusicList,
+			Filters,
+			GuessTemplate
 		},
 		data() {
 			return {
@@ -23,16 +34,21 @@
 				typeIndex: 0,
 				url: 'https://api.uomg.com/api/rand.music',
 				list: [],
-				// selectMusic: {
-				// 	url: ''
-				// },
-				audio: null,
-				modalShow: true
+				guessTitle: '',
+				audioControl: null,
+				modalShow: true,
+				playAudio: {
+					url: ''
+				},
+				guessAudio: {
+					url: ''
+				},
+				showGuess: true
 			}
 		},
 		created() {
 			_this = this;
-			this.audio = uni.createInnerAudioContext();
+			this.audioControl = uni.createInnerAudioContext();
 			// this.getMusic();
 		},
 		computed: {
@@ -63,13 +79,21 @@
 				}while(this.list.length < 11);
 				console.log(this.list);
 			},
-			clickMusic(music) {
-				this.audio.src = music.url;
-				this.audio.play();
+			playMusic(music) {
+				// this.playAudio = music;
+				// this.audioControl.src = this.playAudio.url;
+				// this.audioControl.play();
+				// this.showGuess = true;
 				console.log(music);
 			},
-			clickMore(music) {
-				
+			toggleModal(music) {
+				this.guessAudio = music;
+				this.modalShow = !this.modalShow;
+			},
+			updateType(typeIndex) {
+				this.typeIndex = typeIndex;
+				console.log(this.selectType)
+				// this.getMusic();
 			}
 		}
 	}
@@ -80,6 +104,9 @@
 		position: relative;
 		.scroll-view {
 			height: 100%;
+		}
+		.modal-box {
+			padding: 50rpx;
 		}
 		// background-color: skyblue;
 	}

@@ -3,24 +3,23 @@
 		<!-- <u-mask :show="isMaskShow" :z-index="10000" @tap="$refs.addPlanButton.addButtonToggle()"></u-mask> -->
 		<view class="main">
 			<u-navbar class="navbar" v-if="isNavbarShow" :is-back="isNavbarBack" :title="title" :background="background" title-color="white" title-size="35" back-icon-color="#fff" >
-				<!-- <u-dropdown>
-					<u-dropdown-item v-model="value1" title="首页" :options="tabbarOption"></u-dropdown-item>
-				</u-dropdown> -->
 				<template #right>
 					
 				</template>
 			</u-navbar>
-			<view :class="{'content': true, 'animation': isAnimation}" :style="contentMoveStyle" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
-				<!-- <home v-if="current == 0"></home>
-				<unlock v-if="current == 1"></unlock>
-				<ranking v-if="current == 2"></ranking>
-				<chat v-if="current == 3"></chat>
-				<profile v-if="current == 4"></profile> -->
-				<home class="content-item" :style="tabbarHeightStyle"></home>
-				<unlock class="content-item"></unlock>
-				<ranking class="content-item"></ranking>
-				<chat class="content-item"></chat>
-				<profile class="content-item"></profile>
+			<view class="content-box">
+				<view :class="{'content': true, 'animation': isAnimation}" :style="contentMoveStyle" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
+					<!-- <home v-if="current == 0"></home>
+					<unlock v-if="current == 1"></unlock>
+					<ranking v-if="current == 2"></ranking>
+					<chat v-if="current == 3"></chat>
+					<profile v-if="current == 4"></profile> -->
+					<home class="content-item" :style="tabbarHeightStyle"></home>
+					<unlock class="content-item" :style="tabbarHeightStyle"></unlock>
+					<ranking class="content-item" :style="tabbarHeightStyle"></ranking>
+					<chat class="content-item" :style="tabbarHeightStyle"></chat>
+					<profile class="content-item" :style="tabbarHeightStyle"></profile>
+				</view>
 			</view>
 			<u-tabbar bg-color="#fff" :list="list" active-color="#2979ff" v-model="current" @change="tabbarChange" :show="isTabbarShow"></u-tabbar>
 		</view>
@@ -30,6 +29,7 @@
 <script>
 	// https://autumnfish.cn/
 	import Home from "../home/home.vue"
+	import HomeTitle from "./children/homeTitle.vue"
 	import Unlock from "../unlock/unlock.vue"
 	import Ranking from "../ranking/ranking.vue"
 	import Chat from "../chat/chat.vue"
@@ -42,6 +42,7 @@
 	export default {
 		components: {
 			Home,
+			HomeTitle,
 			Unlock,
 			Ranking,
 			Chat,
@@ -73,7 +74,8 @@
 			},
 			contentMoveStyle(){
 				return {
-					transform: `translateX(${_this.diffX}px)`
+					// transform: `translateX(${_this.diffX}px)`
+					left: `${_this.diffX}px`
 				}
 			},
 			currentX(){
@@ -145,12 +147,17 @@
 			flex-direction: column;
 			height: 100%;
 			overflow: hidden;
-			.content {
+			.content-box {
 				flex: 1;
-				display: flex;
-				width: 500vw;
-				.content-item {
-					flex: 1;
+				position: relative;
+				.content {
+					display: flex;
+					position: absolute;
+					left: 0;
+					width: 500vw;
+					.content-item {
+						flex: 1;
+					}
 				}
 			}
 		}
