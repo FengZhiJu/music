@@ -127,7 +127,7 @@
 				.title {
 					flex: 1;
 					margin: 0 30rpx;
-					// filter: blur(5px);
+					filter: blur(5px);
 					.singer {
 						font-size: 25rpx;
 						color: #aaa;

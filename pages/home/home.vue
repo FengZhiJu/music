@@ -3,17 +3,13 @@
 		<!-- <audio v-if="selectMusic.url" :src="selectMusic.url" :poster="false" :name="false" :author="false" :action="{method: 'pause'}" controls></audio> -->
 		<scroll-view :scroll-y="true" class="scroll-view">
 			<filters @updateType='updateType' :list="typeList"></filters>
-			<music-list @clickMusic="playMusic" @clickMore='toggleModal'></music-list>
+			<!-- <music-list @clickMusic="playMusic" @clickMore='toggleModal'></music-list> -->
+			<music-list @clickMusic="selectMusic" @clickMore='selectMusic'></music-list>
 		</scroll-view>
-		<u-popup v-model="showGuess" mode="center">
+		<!-- <u-popup v-model="showGuess" mode="center">
 			<guess-template></guess-template>
-		</u-popup>
-		
-		<!-- <u-modal v-model="modalShow" :show-cancel-button="true" title="猜歌名">
-			<view class="modal-box">
-				<u-input v-model="guessTitle" type="text" inputAlign="center" :focus="true" :clearable="false"/>
-			</view>
-		</u-modal> -->
+		</u-popup> -->
+		<u-modal v-model="modalShow" :show-cancel-button="true" title="猜歌名" content="是否进入游戏" @confirm="isInGame"></u-modal>
 	</view>
 </template>
 
@@ -37,12 +33,13 @@
 				guessTitle: '',
 				audioControl: null,
 				modalShow: true,
-				playAudio: {
-					url: ''
-				},
-				guessAudio: {
-					url: ''
-				},
+				// playAudio: {
+				// 	url: ''
+				// },
+				// guessAudio: {
+				// 	url: ''
+				// },
+				currentMusic: {},
 				showGuess: true
 			}
 		},
@@ -79,21 +76,35 @@
 				}while(this.list.length < 11);
 				console.log(this.list);
 			},
-			playMusic(music) {
-				// this.playAudio = music;
-				// this.audioControl.src = this.playAudio.url;
-				// this.audioControl.play();
-				// this.showGuess = true;
+			// playMusic(music) {
+			// 	// this.playAudio = music;
+			// 	// this.audioControl.src = this.playAudio.url;
+			// 	// this.audioControl.play();
+			// 	this.showGuess = true;
+			// 	this.modalShow = true;
+			// 	console.log(music);
+			// },
+			// toggleModal(music) {
+			// 	this.guessAudio = music;
+			// 	this.modalShow = !this.modalShow;
+			// },
+			selectMusic(music) {
+				this.currentMusic = music;
+				this.modalShow = true;
 				console.log(music);
-			},
-			toggleModal(music) {
-				this.guessAudio = music;
-				this.modalShow = !this.modalShow;
 			},
 			updateType(typeIndex) {
 				this.typeIndex = typeIndex;
 				console.log(this.selectType)
 				// this.getMusic();
+			},
+			isInGame() {
+				this.$Router.push({
+					name: 'game',
+					query: {
+						musicInfo: _this.currentMusic
+					}
+				})
 			}
 		}
 	}

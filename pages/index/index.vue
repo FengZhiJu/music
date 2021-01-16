@@ -75,7 +75,7 @@
 			contentMoveStyle(){
 				return {
 					// transform: `translateX(${_this.diffX}px)`
-					left: `${_this.diffX}px`
+					left: `${this.diffX}px`
 				}
 			},
 			currentX(){
