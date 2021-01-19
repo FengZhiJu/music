@@ -4,9 +4,11 @@
 			console.log('App Launch')
 		},
 		onShow: function() {
+			uni.$emit('appShow')
 			console.log('App Show')
 		},
 		onHide: function() {
+			uni.$emit('appHide')
 			console.log('App Hide')
 		}
 	}
